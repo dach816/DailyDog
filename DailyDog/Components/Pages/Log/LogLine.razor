@@ -1,9 +1,9 @@
 ﻿@using Domain
 
-<div class="row overflow-y-auto log-text">
+<div class="row log-text">
     <div class="d-flex flex-row align-items-center">
         <div class="circle" style="background: @User.Color">@userInitials</div>
-        <div class="ml-1"> <small>@Log.Timestamp.ToString("t")</small> @Dog.Name @Activity.Text @Activity.Emoji</div>
+        <div class="ml-1"> @Log.Timestamp.ToString("hh:mm tt") - @Dog.Name @Activity.Text @Activity.Emoji</div>
     </div>
 </div>
 

@@ -9,4 +9,6 @@ public class Activity
     public string Text { get; set; }
 
     public string Emoji { get; set; }
+
+    public string Color { get; set; }
 }
