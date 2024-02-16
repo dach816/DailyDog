@@ -1,7 +1,92 @@
-﻿@page "/"
+﻿@using DailyDog.Components.Pages.Components;
+@using Domain;
+@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>DailyDog Log</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="row overflow-hidden">
+    <div class="text-center">
+        <h3 class="display-4">@DateTime.Today.ToString("MM/dd/yyyy")</h3>
+    </div>
+</div>
 
-Welcome to your new app.
+@foreach (var log in logs.OrderBy(l => l.Timestamp))
+{
+    <LogComponent Log="log" Dog="dog" User="user" Activity="activities.First(a => a.Id == log.ActivityId)" />
+}
+
+@code {
+    private List<Log> logs;
+    private List<Activity> activities;
+    private User user;
+    private Dog dog;
+
+    protected override void OnInitialized()
+    {
+        user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "Sdach",
+            Color = "#6666ff",
+            HouseholdId = Guid.Empty
+        };
+        dog = new Dog
+        {
+            Id = Guid.NewGuid(),
+            Name = "Millie",
+            HouseholdId = Guid.Empty
+        };
+        activities = new List<Activity>
+        {
+            new Activity
+            {
+                Id = Guid.NewGuid(),
+                HouseholdId = Guid.Empty,
+                Text = "ate a meal",
+                Emoji = "🍴"
+            },
+            new Activity
+            {
+                Id = Guid.NewGuid(),
+                HouseholdId = Guid.Empty,
+                Text = "did training",
+                Emoji = "💪"
+            },
+            new Activity
+            {
+                Id = Guid.NewGuid(),
+                HouseholdId = Guid.Empty,
+                Text = "went for a walk",
+                Emoji = "🐕‍🦺"
+            },
+        };
+        logs = new List<Log>();
+        for (var i = 0; i < 10; i++)
+        {
+            logs.Add(new Log
+            {
+                Id = Guid.NewGuid(),
+                ActivityId = activities.First().Id,
+                DogId = dog.Id,
+                UserId = user.Id,
+                Timestamp = DateTime.Now.AddHours(i * -1)
+            });
+            logs.Add(new Log
+            {
+                Id = Guid.NewGuid(),
+                ActivityId = activities.ElementAt(1).Id,
+                DogId = dog.Id,
+                UserId = user.Id,
+                Timestamp = DateTime.Now.AddHours(i * -1)
+            });
+            logs.Add(new Log
+            {
+                Id = Guid.NewGuid(),
+                ActivityId = activities.Last().Id,
+                DogId = dog.Id,
+                UserId = user.Id,
+                Timestamp = DateTime.Now.AddHours(i * -1)
+            });
+        }
+    }
+}
