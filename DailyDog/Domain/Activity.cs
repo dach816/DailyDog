@@ -10,5 +10,5 @@ public class Activity
 
     public string Emoji { get; set; }
 
-    public string Color { get; set; }
+    public bool QuickAdd { get; set; }
 }

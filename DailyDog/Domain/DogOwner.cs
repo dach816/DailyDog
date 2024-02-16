@@ -1,6 +1,6 @@
 ﻿namespace DailyDog.Domain;
 
-public class User
+public class DogOwner
 {
     public Guid Id { get; set; }
 
