@@ -1,0 +1,18 @@
+﻿@using Domain;
+@using Services;
+@using DailyDog.Components.Pages.LogPage.Model;
+
+@foreach (var log in Model.Logs?.OrderBy(l => l.TimestampUtc).ToList() ?? new List<Log>())
+{
+    <LogLine Log="log" Dog="GetLogDog(log)" DogOwner="Model.DogOwner" Activity="Model.Activities?.FirstOrDefault(a => a.Id == log.ActivityId)" />
+}
+
+@code {
+    [CascadingParameter]
+    public LogViewModel Model { get; set; }
+
+    private Dog GetLogDog(Log log)
+    {
+        return Model.Dogs?.FirstOrDefault(d => d.Id == log.DogId);
+    }
+}

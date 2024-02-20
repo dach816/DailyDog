@@ -1,12 +1,13 @@
 using DailyDog.Components;
 using DailyDog.Persistence;
 using DailyDog.Persistence.Repositories;
+using DailyDog.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+.AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<DapperDbConnection>();
 builder.Services.AddSingleton<HouseholdRepository>();
@@ -14,6 +15,10 @@ builder.Services.AddSingleton<DogOwnerRepository>();
 builder.Services.AddSingleton<DogRepository>();
 builder.Services.AddSingleton<ActivityRepository>();
 builder.Services.AddSingleton<LogRepository>();
+
+builder.Services.AddSingleton<LogService>();
+builder.Services.AddSingleton<DogService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
