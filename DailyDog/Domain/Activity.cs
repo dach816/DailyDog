@@ -8,7 +8,7 @@ public class Activity
 
     public string Text { get; set; }
 
-    public string Emoji { get; set; }
+    public string ShortDescriptor { get; set; }
 
     public bool QuickAdd { get; set; }
 }
