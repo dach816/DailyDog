@@ -1,6 +1,5 @@
 ﻿@using Domain;
 @using Services;
-@inject LogService LogService;
 
 <button type="button" class="btn btn-outline-secondary mx-1 mt-2" style="background: #031633" @onclick="AddLogAsync">@Activity.ShortDescriptor</button>
 
@@ -12,11 +11,10 @@
     public Activity Activity { get; set; }
 
     [Parameter]
-    public DogOwner DogOwner { get; set; }
+    public Func<(Activity, List<Dog>), Task> AddLog { get; set; }
 
     public async Task AddLogAsync()
     {
-        await LogService.AddLogAsync(Activity, Dogs, DogOwner);
-        StateHasChanged();
+        await AddLog.Invoke((Activity, Dogs));
     }
 }

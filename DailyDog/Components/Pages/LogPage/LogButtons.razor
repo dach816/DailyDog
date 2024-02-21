@@ -1,14 +1,13 @@
 ﻿@using Domain;
 @using Services;
 @using DailyDog.Components.Pages.LogPage.Model;
-@rendermode InteractiveServer
 
 <div class="row log-text my-2">
     <div class="d-flex flex-row flex-wrap align-items-center">
-        <button type="button" class="btn btn-primary btn-outline-light me-1 mt-2">+ New</button>
+        <NewLogButton />
         @foreach (var activity in Model.Activities?.Where(a => a.QuickAdd).Take(5) ?? new List<Activity>())
         {
-            <LogButton Activity="activity" Dogs="Model.Dogs" DogOwner="Model.DogOwner" />
+            <QuickAddLogButton Activity="activity" Dogs="Model.Dogs" AddLog="AddLog" />
         }
     </div>
 </div>
@@ -16,4 +15,7 @@
 @code {
     [CascadingParameter]
     public LogViewModel Model { get; set; }
+
+    [Parameter]
+    public Func<(Activity Activity, List<Dog> Dogs), Task> AddLog { get; set; }
 }

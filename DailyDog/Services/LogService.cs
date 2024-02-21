@@ -5,8 +5,9 @@ namespace DailyDog.Services;
 
 public class LogService(LogRepository logRepo)
 {
-    public async Task AddLogAsync(Activity activity, List<Dog> dogs, DogOwner dogOwner)
+    public async Task<List<Log>> AddLogAsync(Activity activity, List<Dog> dogs, DogOwner dogOwner)
     {
+        var newLogs = new List<Log>();
         foreach (var dog in dogs)
         {
             var log = new Log
@@ -18,7 +19,10 @@ public class LogService(LogRepository logRepo)
                 TimestampUtc = DateTime.UtcNow
             };
             await logRepo.CreateLogAsync(log);
+            newLogs.Add(log);
         }
+
+        return newLogs;
     }
 
     public async Task<List<Log>> GetLogsAsync(Guid householdId)

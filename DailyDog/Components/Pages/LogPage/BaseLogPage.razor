@@ -1,0 +1,56 @@
+﻿@using DailyDog.Components.Pages.LogPage;
+@using DailyDog.Components.Pages.LogPage.Model;
+@using Domain;
+@using Services;
+@inject DogService DogService;
+@inject LogService LogService;
+
+<PageTitle>DailyDog Log</PageTitle>
+
+<div class="row overflow-hidden">
+    <div class="text-center">
+        <h3 class="display-4">Today's Activities</h3>
+    </div>
+</div>
+
+
+@if (loading || Model == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <CascadingValue Value="@Model">
+        <LogButtons AddLog="((args) => AddLogAsync(args.Activity, args.Dogs))"/>
+        <Logs />
+    </CascadingValue>
+}
+
+@code {
+    public LogViewModel Model { get; set; }
+
+    private bool loading = true;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        Model = new LogViewModel
+            {
+                Household = await DogService.GetHouseholdAsync()
+            };
+        Model.Activities = await DogService.GetActivitiesAsync(Model.Household.Id);
+        Model.DogOwner = await DogService.GetDogOwnerAsync(Model.Household.Id);
+        Model.Dogs = await DogService.GetDogsAsync(Model.Household.Id);
+        Model.Logs = await LogService.GetLogsAsync(Model.Household.Id);
+
+        loading = false;
+        StateHasChanged();
+    }
+
+    public async Task AddLogAsync(Activity activity, List<Dog> dogs)
+    {
+        var logs = await LogService.AddLogAsync(activity, dogs, Model.DogOwner);
+        Model.Logs.AddRange(logs);
+        StateHasChanged();
+    }
+}
